@@ -1,3 +1,4 @@
+from pathlib import Path
 import peewee as pw
 from playhouse.sqlite_ext import SqliteExtDatabase, FTSModel, Model, SearchField, RowIDField
 
@@ -5,7 +6,7 @@ pragmas = [
     ('journal_mode', 'wal'),
     ('cache_size', -1024 * 32)]
 
-db = SqliteExtDatabase('/Users/naseerdari/.kbase/main.db', pragmas=pragmas)
+db = SqliteExtDatabase(f'{str(Path.home())}/.kbase/main.db', pragmas=pragmas)
 
 class Entry(Model):
     content = pw.TextField()
