@@ -9,8 +9,8 @@ import pandas as pd
 def _recreate_db():
     src_dir = os.path.dirname(os.path.abspath(__file__))
     db_path = os.path.join(src_dir, '../data/main.db')
-    # if os.path.exists(db_path):
-    #     os.remove(db_path)
+    if os.path.exists(db_path):
+        os.remove(db_path)
     pragmas = [
         ('journal_mode', 'wal'),
         ('cache_size', -1024 * 32)]
@@ -42,7 +42,7 @@ def add_wiki_data():
     data_path = os.path.join(src_dir, '../data/wikipedia_extracted_abstracts_700000.csv')
     df = pd.read_csv(data_path)
     df.abstract = df.abstract.astype(str)
-    for i, row in enumerate(df.itertuples()):
+    for i, row in enumerate(df[:100000].itertuples()):
         if i % 10000 == 0:
             print(f"done with {i} rows")
         add_entry(row.abstract)
@@ -58,8 +58,8 @@ def search(*search_strings):
     return [i["content"] for i in res]
 
 def main():
-    # DB.create_tables([Entry, EntryIndex], safe=True)
-    # add_wiki_data()
+    DB.create_tables([Entry, EntryIndex], safe=True)
+    add_wiki_data()
     res = search(*sys.argv[1:])
     for i in res:
         print()
